@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>字 Bee — Bilingual Spelling Bee</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Noto+Serif+SC:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="masthead">
+  <h1 class="wordmark"><span class="wm-zh">字</span>Bee</h1>
+  <p class="tagline">English you can barely spell. 中文 you can barely write.</p>
+</header>
+
+<!-- ===================== SETUP SCREEN ===================== -->
+<main id="setup-screen" class="screen">
+  <section class="panel">
+    <h2 class="panel-title">Players</h2>
+    <div class="add-player-row">
+      <input id="player-name-input" type="text" maxlength="20" placeholder="Add a player name" autocomplete="off">
+      <button id="add-player-btn" class="btn btn-solid">Add</button>
+    </div>
+    <ul id="player-list" class="player-list"></ul>
+    <p id="no-players-msg" class="empty-note">No players yet. Add at least one to start.</p>
+  </section>
+
+  <section class="panel">
+    <h2 class="panel-title">Rules</h2>
+    <div class="setting-row">
+      <span class="setting-label">Languages</span>
+      <div class="seg" role="radiogroup" aria-label="Language mode">
+        <button class="seg-btn is-active" data-mode="mixed">Mixed</button>
+        <button class="seg-btn" data-mode="en">English only</button>
+        <button class="seg-btn" data-mode="zh">中文 only</button>
+      </div>
+    </div>
+    <div class="setting-row">
+      <span class="setting-label">Turns per player</span>
+      <div class="seg" role="radiogroup" aria-label="Turns per player">
+        <button class="seg-btn" data-turns="5">5</button>
+        <button class="seg-btn is-active" data-turns="10">10</button>
+        <button class="seg-btn" data-turns="15">15</button>
+        <button class="seg-btn" data-turns="0">Endless</button>
+      </div>
+    </div>
+    <p class="rules-note">1 point per correct answer. Get 3 in a row and every word in the streak is worth 2. English words are read aloud — press <em>Hear word</em> and spell what you hear. Chinese words show pinyin + meaning — type the characters (you'll need a Chinese keyboard/IME enabled).</p>
+    <button id="start-btn" class="btn btn-solid btn-big" disabled>Start game</button>
+  </section>
+</main>
+
+<!-- ===================== GAME SCREEN ===================== -->
+<main id="game-screen" class="screen" hidden>
+  <div class="game-layout">
+
+    <section class="stage">
+      <div class="turn-banner">
+        <span id="turn-player" class="turn-player">—</span>
+        <span id="turn-count" class="turn-count"></span>
+      </div>
+
+      <div id="word-card" class="word-card">
+        <div class="card-head">
+          <span id="lang-tag" class="lang-tag">ENGLISH</span>
+          <span id="pos-tag" class="pos-tag"></span>
+        </div>
+
+        <!-- English prompt -->
+        <div id="en-prompt" class="prompt" hidden>
+          <button id="hear-btn" class="btn btn-hear" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3z" fill="currentColor"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            Hear word
+          </button>
+          <p class="hint-label">Definition</p>
+          <p id="en-def" class="definition"></p>
+          <p id="en-ex" class="example" hidden></p>
+        </div>
+
+        <!-- Chinese prompt -->
+        <div id="zh-prompt" class="prompt" hidden>
+          <p id="zh-pinyin" class="pinyin"></p>
+          <p class="hint-label">Meaning</p>
+          <p id="zh-def" class="definition"></p>
+        </div>
+
+        <form id="answer-form" class="answer-row" autocomplete="off">
+          <input id="answer-input" type="text" class="answer-input" placeholder="Type your answer" autocomplete="off" autocapitalize="off" spellcheck="false">
+          <button type="submit" class="btn btn-solid">Submit</button>
+        </form>
+
+        <div class="card-actions">
+          <button id="skip-btn" class="btn btn-ghost" type="button">Give up (0 pts)</button>
+        </div>
+
+        <!-- Result overlay -->
+        <div id="result-overlay" class="result-overlay" hidden>
+          <div id="stamp" class="stamp" aria-hidden="true">对</div>
+          <p id="result-line" class="result-line"></p>
+          <p id="result-answer" class="result-answer"></p>
+          <p id="result-detail" class="result-detail"></p>
+          <button id="next-btn" class="btn btn-solid btn-big">Next word</button>
+        </div>
+      </div>
+    </section>
+
+    <aside class="scoreboard">
+      <h2 class="panel-title">Scoreboard</h2>
+      <ol id="score-list" class="score-list"></ol>
+      <button id="end-game-btn" class="btn btn-ghost btn-danger">End game</button>
+    </aside>
+
+  </div>
+</main>
+
+<!-- ===================== FINAL SCREEN ===================== -->
+<main id="final-screen" class="screen" hidden>
+  <section class="panel final-panel">
+    <p class="final-eyebrow">Final standings</p>
+    <h2 id="winner-line" class="winner-line"></h2>
+    <ol id="final-list" class="score-list final-list"></ol>
+    <div class="final-actions">
+      <button id="rematch-btn" class="btn btn-solid btn-big">Rematch (same players)</button>
+      <button id="new-game-btn" class="btn btn-ghost">New setup</button>
+    </div>
+  </section>
+</main>
+
+<footer class="site-foot">
+  <span id="bank-count"></span> · scores save automatically in this browser
+</footer>
+
+<script src="words.js"></script>
+<script src="game.js"></script>
+</body>
+</html>

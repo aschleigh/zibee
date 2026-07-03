@@ -1,0 +1,300 @@
+/* ============================================================
+   字Bee — design tokens
+   Paper: cool exercise-book white with faint ruled lines
+   Ink:   near-black blue
+   Vermilion #C3272B — reserved for Chinese + the grading stamp
+   Oxford  #27418F — reserved for English
+   ============================================================ */
+:root {
+  --paper: #FBFAF6;
+  --line: #E4E1D6;
+  --ink: #16181D;
+  --ink-soft: #5A5D66;
+  --vermilion: #C3272B;
+  --vermilion-soft: #F7E4E2;
+  --oxford: #27418F;
+  --oxford-soft: #E4E9F6;
+  --gold: #B98A2F;
+  --card: #FFFFFF;
+  --radius: 10px;
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body: "IBM Plex Sans", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", monospace;
+  --font-hanzi: "Noto Serif SC", serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+[hidden] { display: none !important; }
+
+body {
+  font-family: var(--font-body);
+  color: var(--ink);
+  background-color: var(--paper);
+  /* faint ruled-notebook lines */
+  background-image: repeating-linear-gradient(
+    to bottom, transparent 0, transparent 31px, var(--line) 31px, var(--line) 32px);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+button { font-family: inherit; cursor: pointer; }
+input { font-family: inherit; }
+
+/* ---------- masthead ---------- */
+.masthead { text-align: center; padding: 40px 16px 8px; }
+.wordmark {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(2.6rem, 6vw, 4rem);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.wm-zh {
+  font-family: var(--font-hanzi);
+  font-weight: 700;
+  color: var(--vermilion);
+  margin-right: 0.08em;
+}
+.tagline { color: var(--ink-soft); margin-top: 10px; font-size: 0.95rem; }
+
+/* ---------- screens & panels ---------- */
+.screen {
+  width: min(1060px, 100% - 32px);
+  margin: 24px auto;
+  display: grid;
+  gap: 20px;
+}
+#setup-screen { grid-template-columns: 1fr 1fr; align-items: start; }
+
+.panel {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(22,24,29,0.05);
+}
+.panel-title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.25rem;
+  margin-bottom: 16px;
+}
+
+/* ---------- setup: players ---------- */
+.add-player-row { display: flex; gap: 8px; margin-bottom: 14px; }
+.add-player-row input {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1.5px solid var(--line);
+  border-radius: 8px;
+  font-size: 1rem;
+  background: var(--paper);
+}
+.add-player-row input:focus { outline: 2px solid var(--oxford); outline-offset: 1px; border-color: transparent; }
+
+.player-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.player-list li {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper);
+  font-weight: 500;
+}
+.player-list .remove-btn {
+  border: none; background: none; color: var(--ink-soft);
+  font-size: 1.1rem; line-height: 1; padding: 4px 6px; border-radius: 6px;
+}
+.player-list .remove-btn:hover { color: var(--vermilion); background: var(--vermilion-soft); }
+.empty-note { color: var(--ink-soft); font-size: 0.9rem; }
+
+/* ---------- setup: rules ---------- */
+.setting-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
+.setting-label { font-weight: 600; font-size: 0.95rem; }
+.seg { display: inline-flex; border: 1.5px solid var(--ink); border-radius: 8px; overflow: hidden; }
+.seg-btn {
+  border: none; background: var(--card); color: var(--ink);
+  padding: 7px 13px; font-size: 0.88rem; font-weight: 500;
+  border-right: 1.5px solid var(--ink);
+}
+.seg-btn:last-child { border-right: none; }
+.seg-btn.is-active { background: var(--ink); color: var(--paper); }
+.rules-note { color: var(--ink-soft); font-size: 0.88rem; line-height: 1.55; margin: 6px 0 18px; }
+
+/* ---------- buttons ---------- */
+.btn {
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 10px 18px;
+  border: 1.5px solid var(--ink);
+  transition: transform 0.06s ease;
+}
+.btn:active { transform: translateY(1px); }
+.btn-solid { background: var(--ink); color: var(--paper); }
+.btn-solid:hover { background: #2A2D35; }
+.btn-solid:disabled { opacity: 0.35; cursor: not-allowed; }
+.btn-ghost { background: transparent; color: var(--ink); }
+.btn-ghost:hover { background: var(--paper); }
+.btn-danger:hover { color: var(--vermilion); border-color: var(--vermilion); background: var(--vermilion-soft); }
+.btn-big { width: 100%; padding: 13px; font-size: 1.05rem; }
+
+/* ---------- game layout ---------- */
+.game-layout { display: grid; grid-template-columns: 1fr 280px; gap: 20px; align-items: start; }
+
+.turn-banner {
+  display: flex; align-items: baseline; justify-content: space-between;
+  margin-bottom: 12px; padding: 0 4px;
+}
+.turn-player { font-family: var(--font-display); font-weight: 900; font-size: 1.6rem; }
+.turn-count { color: var(--ink-soft); font-size: 0.9rem; font-variant-numeric: tabular-nums; }
+
+/* ---------- word card ---------- */
+.word-card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 28px;
+  min-height: 380px;
+  box-shadow: 0 1px 3px rgba(22,24,29,0.05);
+  overflow: hidden;
+}
+.card-head { display: flex; align-items: center; gap: 10px; margin-bottom: 22px; }
+.lang-tag {
+  font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em;
+  padding: 4px 10px; border-radius: 4px;
+}
+.lang-tag.en { background: var(--oxford-soft); color: var(--oxford); }
+.lang-tag.zh { background: var(--vermilion-soft); color: var(--vermilion); }
+.pos-tag { color: var(--ink-soft); font-size: 0.8rem; font-style: italic; }
+
+.hint-label {
+  font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--ink-soft); margin: 18px 0 6px;
+}
+.definition { font-size: 1.08rem; line-height: 1.6; max-width: 56ch; }
+.example { color: var(--ink-soft); font-style: italic; margin-top: 10px; font-size: 0.95rem; }
+
+.pinyin {
+  font-family: var(--font-mono);
+  font-size: clamp(1.7rem, 4vw, 2.3rem);
+  font-weight: 500;
+  color: var(--vermilion);
+  letter-spacing: 0.02em;
+}
+
+.btn-hear {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--oxford); color: #fff; border-color: var(--oxford);
+  font-size: 1rem; padding: 11px 20px;
+}
+.btn-hear:hover { background: #1D3272; }
+
+/* ---------- answer ---------- */
+.answer-row { display: flex; gap: 10px; margin-top: 26px; }
+.answer-input {
+  flex: 1;
+  font-size: 1.25rem;
+  padding: 11px 14px;
+  border: 1.5px solid var(--ink);
+  border-radius: 8px;
+  background: var(--paper);
+}
+/* tianzige-inspired ruled input for Chinese turns */
+.answer-input.zh {
+  font-family: var(--font-hanzi);
+  font-size: 1.6rem;
+  letter-spacing: 0.15em;
+  background-image: linear-gradient(to right, transparent calc(50% - 0.5px), var(--vermilion-soft) calc(50% - 0.5px), var(--vermilion-soft) calc(50% + 0.5px), transparent calc(50% + 0.5px));
+}
+.answer-input:focus { outline: 2px solid var(--oxford); outline-offset: 1px; }
+.answer-input.zh:focus { outline-color: var(--vermilion); }
+
+.card-actions { margin-top: 14px; display: flex; justify-content: flex-end; }
+
+/* ---------- result overlay & the stamp ---------- */
+.result-overlay {
+  position: absolute; inset: 0;
+  background: var(--card);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 10px; padding: 24px; text-align: center;
+}
+.stamp {
+  font-family: var(--font-hanzi);
+  font-weight: 700;
+  font-size: 3rem;
+  line-height: 1;
+  width: 92px; height: 92px;
+  display: flex; align-items: center; justify-content: center;
+  border: 5px solid currentColor;
+  border-radius: 14px;
+  transform: rotate(-8deg);
+  margin-bottom: 8px;
+  animation: stamp-in 0.28s cubic-bezier(0.2, 1.6, 0.4, 1);
+}
+.stamp.ok { color: var(--vermilion); }
+.stamp.bad { color: var(--ink-soft); }
+@keyframes stamp-in {
+  from { transform: rotate(-8deg) scale(2.2); opacity: 0; }
+  to   { transform: rotate(-8deg) scale(1);   opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .stamp { animation: none; }
+}
+.result-line { font-family: var(--font-display); font-weight: 600; font-size: 1.3rem; }
+.result-answer { font-size: 1.7rem; font-weight: 600; }
+.result-answer.zh { font-family: var(--font-hanzi); font-size: 2.1rem; }
+.result-detail { color: var(--ink-soft); font-size: 0.92rem; max-width: 48ch; }
+#next-btn { margin-top: 14px; max-width: 260px; }
+
+/* ---------- scoreboard ---------- */
+.scoreboard {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 20px;
+  position: sticky; top: 16px;
+}
+.score-list { list-style: none; counter-reset: place; display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+.score-list li {
+  counter-increment: place;
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 10px; border-radius: 8px;
+  font-variant-numeric: tabular-nums;
+}
+.score-list li::before {
+  content: counter(place);
+  font-family: var(--font-mono);
+  color: var(--ink-soft);
+  font-size: 0.8rem; width: 1.2em;
+}
+.score-list li.is-current { background: var(--paper); outline: 1.5px solid var(--ink); }
+.score-list .sname { flex: 1; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.score-list .streak { font-size: 0.8rem; color: var(--gold); font-weight: 600; }
+.score-list .pts { font-weight: 600; }
+
+/* ---------- final screen ---------- */
+.final-panel { max-width: 560px; margin: 0 auto; text-align: center; grid-column: 1 / -1; }
+.final-eyebrow { font-size: 0.75rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-soft); }
+.winner-line { font-family: var(--font-display); font-weight: 900; font-size: 2rem; margin: 10px 0 22px; }
+.final-list { text-align: left; max-width: 340px; margin: 0 auto 24px; }
+.final-list li:first-child { background: var(--vermilion-soft); }
+.final-actions { display: flex; flex-direction: column; gap: 10px; align-items: center; }
+.final-actions .btn { min-width: 280px; }
+
+/* ---------- footer ---------- */
+.site-foot {
+  text-align: center; color: var(--ink-soft);
+  font-size: 0.8rem; padding: 28px 16px; margin-top: auto;
+}
+
+/* ---------- responsive ---------- */
+@media (max-width: 800px) {
+  #setup-screen { grid-template-columns: 1fr; }
+  .game-layout { grid-template-columns: 1fr; }
+  .scoreboard { position: static; }
+  .word-card { padding: 20px; min-height: 0; }
+  .answer-row { flex-direction: column; }
+}
